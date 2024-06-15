@@ -1,6 +1,6 @@
-﻿using HepsiAPI.Application.Common;
+﻿using HepsiAPI.Domain.Common;
 
-namespace HepsiAPI.Application.Entities
+namespace HepsiAPI.Domain.Entities
 {
     public class Product : BaseEntity
     {
