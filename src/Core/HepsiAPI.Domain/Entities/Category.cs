@@ -9,9 +9,9 @@ namespace HepsiAPI.Domain.Entities
 {
     public class Category : BaseEntity
     {
-        public required int ParentId { get; set; }
-        public required string CategoryName { get; set; }
-        public required int Priority { get; set; }
+        public int ParentId { get; set; }
+        public string CategoryName { get; set; }
+        public int Priority { get; set; }
 
 
         //Navigation Props.

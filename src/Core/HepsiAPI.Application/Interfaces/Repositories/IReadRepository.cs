@@ -8,7 +8,7 @@ namespace HepsiAPI.Application.Interfaces.Repositories
         where TEntity : class, IBaseEntity, new()
     {
         Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, params Expression<Func<TEntity, object>>[] includes);
-        Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, int pageNumber = 1, int pageSize = 10, params Expression<Func<TEntity, object>>[] includes);
+        Task<IEnumerable<TEntity>> GetAllAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>>? predicate = null, params Expression<Func<TEntity, object>>[] includes);
 
         Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, bool enableTracking = false, params Expression<Func<TEntity, object>>[] includes);
 

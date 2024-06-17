@@ -25,7 +25,7 @@ namespace HepsiAPI.Persistence.Repositories.EfCoreRepositories
             return await query.IncludeMultiple(includes).ToListAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, int pageNumber = 1, int pageSize = 10, params Expression<Func<TEntity, object>>[] includes)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(int pageNumber = 1, int pageSize = 10, Expression<Func<TEntity, bool>>? predicate = null, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = _dbSet.AsNoTracking();
             if (predicate is not null) query = query.Where(predicate);
