@@ -14,7 +14,7 @@ var env = builder.Environment;
 
 builder.Configuration.SetBasePath(env.ContentRootPath)
     .AddJsonFile("appsettings.json", optional: false)
-    .AddJsonFile($"appsetting.{env.EnvironmentName}json", optional: true);
+    .AddJsonFile($"appsettings.{env.EnvironmentName}json", optional: true);
 
 builder.Services.AddPersistence(builder.Configuration);
 

@@ -4,7 +4,7 @@ namespace HepsiAPI.Domain.Entities
 {
     public class Brand : BaseEntity
     {
-        public required string BrandName { get; set; }
+        public string BrandName { get; set; }
 
 
         //Navigation Props.
