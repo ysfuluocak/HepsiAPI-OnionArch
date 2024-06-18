@@ -17,42 +17,40 @@ namespace HepsiAPI.Persistence.Repositories.EfCoreRepositories
             _dbSet = _context.Set<TEntity>();
         }
 
-        public async Task<int> AddAsync(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
-            var addedEntity = _context.Entry(entity);
-            addedEntity.State = EntityState.Added;
-            return await _context.SaveChangesAsync();
+            await _dbSet.AddAsync(entity);
+
+            var state = _dbSet.Entry(entity);
         }
 
-        public async Task<int> AddRangeAsync(IEnumerable<TEntity> entities)
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            var addedEntities = _context.Entry(entities);
-            addedEntities.State = EntityState.Added;
-            return await _context.SaveChangesAsync();
+            await _dbSet.AddRangeAsync(entities);
         }
 
         public async Task DeleteAsync(TEntity entity)
         {
-            var deletedEntity = _context.Entry(entity);
-            deletedEntity.State = EntityState.Deleted;
-            await _context.SaveChangesAsync();
+            await Task.Run(() => _dbSet.Remove(entity));
         }
 
         public async Task DeleteByIdAsync(int id)
         {
             var entity = await _dbSet.FindAsync(id);
             //entity kontrolu eklenebilir
-            var deletedEntity = _context.Entry(entity);
-            deletedEntity.State = EntityState.Deleted;
-            await _context.SaveChangesAsync();
+            await DeleteAsync(entity);
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            var updatedEntity = _context.Entry(entity);
-            updatedEntity.State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            await Task.Run(() => _dbSet.Update(entity));
             return entity;
+        }
+
+        public async Task DeleteRangeAsync(IEnumerable<TEntity> entities)
+        {
+
+            await Task.Run(() => _dbSet.RemoveRange(entities));
         }
     }
 }

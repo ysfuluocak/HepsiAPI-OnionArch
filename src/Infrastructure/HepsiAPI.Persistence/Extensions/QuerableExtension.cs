@@ -16,5 +16,8 @@ namespace HepsiAPI.Persistence.Extensions
 
             return query;
         }
+
+
+
     }
 }

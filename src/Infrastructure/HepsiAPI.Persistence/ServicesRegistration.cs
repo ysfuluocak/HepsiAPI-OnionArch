@@ -1,5 +1,13 @@
-﻿using HepsiAPI.Application.Interfaces.UnitOfWorks;
+﻿using HepsiAPI.Application.Interfaces.Repositories.BrandRepositories;
+using HepsiAPI.Application.Interfaces.Repositories.CategoryProductRepositories;
+using HepsiAPI.Application.Interfaces.Repositories.CategoryRepositories;
+using HepsiAPI.Application.Interfaces.Repositories.ProductRepositories;
+using HepsiAPI.Application.Interfaces.UnitOfWorks;
 using HepsiAPI.Persistence.Context;
+using HepsiAPI.Persistence.Repositories.EfCoreRepositories.BrandRepositories;
+using HepsiAPI.Persistence.Repositories.EfCoreRepositories.CategoryProductRepositories;
+using HepsiAPI.Persistence.Repositories.EfCoreRepositories.CategoryRepositories;
+using HepsiAPI.Persistence.Repositories.EfCoreRepositories.ProductRepositories;
 using HepsiAPI.Persistence.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +23,17 @@ namespace HepsiAPI.Persistence
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddScoped<ICategoryReadRepository, EfCategoryReadRepository>();
+            services.AddScoped<ICategoryWriteRepository, EfCategoryWriteRepository>();
+
+            services.AddScoped<IBrandReadRepository, EfBrandReadRepository>();
+            services.AddScoped<IBrandWriteRepository, EfBrandWriteRepository>();
+
+            services.AddScoped<IProductReadRepository, EfProductReadRepository>();
+            services.AddScoped<IProductWriteRepository, EfProductWriteRepository>();
+
+            services.AddScoped<ICategoryProductReadRepository, EfCategoryProductReadRepository>();
+            services.AddScoped<ICategoryProductWriteRepository, EfCategoryProductWriteRepository>();
 
             return services;
         }

@@ -32,7 +32,7 @@ namespace HepsiAPI.Persistence.Repositories.EfCoreRepositories
             return await query.IncludeMultiple(includes).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }
 
-        public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, bool enableTracking = false, params Expression<Func<TEntity, object>>[] includes)
+        public async Task<TEntity> GetAsync(bool enableTracking, Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = _dbSet;
             query = enableTracking ? query : query.AsNoTracking();

@@ -4,6 +4,7 @@ using HepsiAPI.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HepsiAPI.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240617174042_AddedCategoryProduct")]
+    partial class AddedCategoryProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,21 +53,21 @@ namespace HepsiAPI.Persistence.Migrations
                         {
                             Id = 1,
                             BrandName = "Asus",
-                            CreatedDate = new DateTime(2024, 6, 18, 11, 35, 14, 703, DateTimeKind.Local).AddTicks(9074),
+                            CreatedDate = new DateTime(2024, 6, 17, 20, 40, 42, 822, DateTimeKind.Local).AddTicks(5463),
                             IsDeleted = false
                         },
                         new
                         {
                             Id = 2,
                             BrandName = "Hp",
-                            CreatedDate = new DateTime(2024, 6, 18, 11, 35, 14, 703, DateTimeKind.Local).AddTicks(9087),
+                            CreatedDate = new DateTime(2024, 6, 17, 20, 40, 42, 822, DateTimeKind.Local).AddTicks(5474),
                             IsDeleted = false
                         },
                         new
                         {
                             Id = 3,
                             BrandName = "Mango",
-                            CreatedDate = new DateTime(2024, 6, 18, 11, 35, 14, 703, DateTimeKind.Local).AddTicks(9088),
+                            CreatedDate = new DateTime(2024, 6, 17, 20, 40, 42, 822, DateTimeKind.Local).AddTicks(5475),
                             IsDeleted = false
                         });
                 });
@@ -103,7 +106,7 @@ namespace HepsiAPI.Persistence.Migrations
                         {
                             Id = 1,
                             CategoryName = "Elektronik",
-                            CreatedDate = new DateTime(2024, 6, 18, 11, 35, 14, 704, DateTimeKind.Local).AddTicks(308),
+                            CreatedDate = new DateTime(2024, 6, 17, 20, 40, 42, 822, DateTimeKind.Local).AddTicks(6760),
                             IsDeleted = false,
                             ParentId = 0,
                             Priority = 1
@@ -112,7 +115,7 @@ namespace HepsiAPI.Persistence.Migrations
                         {
                             Id = 2,
                             CategoryName = "Moda",
-                            CreatedDate = new DateTime(2024, 6, 18, 11, 35, 14, 704, DateTimeKind.Local).AddTicks(310),
+                            CreatedDate = new DateTime(2024, 6, 17, 20, 40, 42, 822, DateTimeKind.Local).AddTicks(6763),
                             IsDeleted = false,
                             ParentId = 0,
                             Priority = 2
@@ -121,7 +124,7 @@ namespace HepsiAPI.Persistence.Migrations
                         {
                             Id = 3,
                             CategoryName = "Bilgisayar",
-                            CreatedDate = new DateTime(2024, 6, 18, 11, 35, 14, 704, DateTimeKind.Local).AddTicks(311),
+                            CreatedDate = new DateTime(2024, 6, 17, 20, 40, 42, 822, DateTimeKind.Local).AddTicks(6764),
                             IsDeleted = false,
                             ParentId = 1,
                             Priority = 1
@@ -130,7 +133,7 @@ namespace HepsiAPI.Persistence.Migrations
                         {
                             Id = 4,
                             CategoryName = "Kadin",
-                            CreatedDate = new DateTime(2024, 6, 18, 11, 35, 14, 704, DateTimeKind.Local).AddTicks(312),
+                            CreatedDate = new DateTime(2024, 6, 17, 20, 40, 42, 822, DateTimeKind.Local).AddTicks(6765),
                             IsDeleted = false,
                             ParentId = 2,
                             Priority = 1
@@ -195,7 +198,7 @@ namespace HepsiAPI.Persistence.Migrations
                         {
                             Id = 1,
                             BrandId = 1,
-                            CreatedDate = new DateTime(2024, 6, 18, 11, 35, 14, 704, DateTimeKind.Local).AddTicks(5223),
+                            CreatedDate = new DateTime(2024, 6, 17, 20, 40, 42, 823, DateTimeKind.Local).AddTicks(2488),
                             Description = "Oyun Bilgisayari",
                             Discount = 0.5m,
                             IsDeleted = false,
@@ -206,7 +209,7 @@ namespace HepsiAPI.Persistence.Migrations
                         {
                             Id = 2,
                             BrandId = 3,
-                            CreatedDate = new DateTime(2024, 6, 18, 11, 35, 14, 704, DateTimeKind.Local).AddTicks(5231),
+                            CreatedDate = new DateTime(2024, 6, 17, 20, 40, 42, 823, DateTimeKind.Local).AddTicks(2498),
                             Description = "Abiye",
                             Discount = 0.3m,
                             IsDeleted = false,
