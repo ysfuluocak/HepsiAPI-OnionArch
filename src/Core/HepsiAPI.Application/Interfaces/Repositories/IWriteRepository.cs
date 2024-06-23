@@ -12,5 +12,6 @@ namespace HepsiAPI.Application.Interfaces.Repositories
         Task DeleteAsync(TEntity entity);
         Task DeleteRangeAsync(IEnumerable<TEntity> entities);
         Task DeleteByIdAsync(int id);
+        Task<int> CommitAsync();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HepsiAPI.Application.Features.ProductFeatures.Queries.GetProduct;
-using HepsiAPI.Application.Interfaces.UnitOfWorks;
+using HepsiAPI.Application.Interfaces.Repositories.CategoryProductRepositories;
+using HepsiAPI.Application.Interfaces.Repositories.ProductRepositories;
 using MediatR;
 
 namespace HepsiAPI.Application.Features.ProductFeatures.Commands.UpdateProduct
@@ -18,28 +19,36 @@ namespace HepsiAPI.Application.Features.ProductFeatures.Commands.UpdateProduct
 
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, GetProductQueryResponse>
     {
-        private readonly IUnitOfWork _unitOfWork;
+
+        private readonly ICategoryProductReadRepository _categoryProductReadRepository;
+        private readonly ICategoryProductWriteRepository _categoryProductWriteRepository;
+        private readonly IProductWriteRepository _productWriteRepository;
+        private readonly IProductReadRepository _productReadRepository;
         private readonly IMapper _mapper;
 
-        public UpdateProductCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+
+        public UpdateProductCommandHandler(ICategoryProductReadRepository categoryProductReadRepository, ICategoryProductWriteRepository categoryProductWriteRepository, IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _categoryProductReadRepository = categoryProductReadRepository;
+            _categoryProductWriteRepository = categoryProductWriteRepository;
+            _productWriteRepository = productWriteRepository;
+            _productReadRepository = productReadRepository;
             _mapper = mapper;
         }
 
         public async Task<GetProductQueryResponse> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
         {
-            var existingProduct = await _unitOfWork.GetProductReadRepository.GetAsync(true, p => p.Id == request.Id, p => p.CategoryProducts);
+            var existingProduct = await _productReadRepository.GetSingleEntityAsync(p => p.Id == request.Id, true, p => p.CategoryProducts);
 
-            await _unitOfWork.GetCategoryProductWriteRepository.DeleteRangeAsync(existingProduct.CategoryProducts);
+            await _categoryProductWriteRepository.DeleteRangeAsync(existingProduct.CategoryProducts);
 
             var updatedProduct = _mapper.Map(request, existingProduct);
 
-            var response = await _unitOfWork.GetProductWriteRepository.UpdateAsync(updatedProduct);
+            var response = await _productWriteRepository.UpdateAsync(updatedProduct);
 
-            await _unitOfWork.SaveAsync();
+            await _productWriteRepository.CommitAsync();
 
-            response = await _unitOfWork.GetProductReadRepository.GetProductByIdWithDetail(response.Id);
+            response = await _productReadRepository.GetProductByIdWithDetail(response.Id);
 
             return _mapper.Map<GetProductQueryResponse>(response);
         }

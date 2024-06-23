@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using HepsiAPI.Application.Interfaces.UnitOfWorks;
+using HepsiAPI.Application.Features.ProductFeatures.Rules;
+using HepsiAPI.Application.Interfaces.Repositories.ProductRepositories;
 using HepsiAPI.Domain.Entities;
 using MediatR;
 
@@ -17,22 +18,25 @@ namespace HepsiAPI.Application.Features.ProductFeatures.Commands.CreateProduct
 
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandRequest, int>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ProductBusinessRules _productRules;
+        private readonly IProductWriteRepository _productWriteRepository;
         private readonly IMapper _mapper;
 
-        public CreateProductCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public CreateProductCommandHandler(IProductWriteRepository productWriteRepository, IMapper mapper, ProductBusinessRules productRules)
         {
-            _unitOfWork = unitOfWork;
+            _productWriteRepository = productWriteRepository;
             _mapper = mapper;
+            _productRules = productRules;
         }
 
         public async Task<int> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
         {
+            await _productRules.ProductTitleCanNotBeDuplicatedWhenInserted(request.Title);
+
             var addedProduct = _mapper.Map<Product>(request);
 
-            await _unitOfWork.GetProductWriteRepository.AddAsync(addedProduct);
-
-            await _unitOfWork.SaveAsync();
+            await _productWriteRepository.AddAsync(addedProduct);
+            await _productWriteRepository.CommitAsync();
 
             return addedProduct.Id;
 
