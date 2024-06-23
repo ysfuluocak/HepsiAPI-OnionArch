@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using HepsiAPI.Application.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Newtonsoft.Json;
 
 namespace HepsiAPI.WebAPI.Middlewares
 {
@@ -35,7 +35,7 @@ namespace HepsiAPI.WebAPI.Middlewares
             var response = GetErrorDetail(exception);
             context.Response.StatusCode = response.Status.Value;
 
-            return context.Response.WriteAsync(response.ToString());
+            return context.Response.WriteAsync(JsonConvert.SerializeObject(response));
         }
 
         private ProblemDetails GetErrorDetail(Exception exception)

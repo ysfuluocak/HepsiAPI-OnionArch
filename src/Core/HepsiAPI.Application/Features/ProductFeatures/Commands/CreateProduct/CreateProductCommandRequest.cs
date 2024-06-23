@@ -13,7 +13,7 @@ namespace HepsiAPI.Application.Features.ProductFeatures.Commands.CreateProduct
         public decimal Price { get; set; }
         public decimal Discount { get; set; }
         public int BrandId { get; set; }
-        public IEnumerable<int> CategoryIds { get; set; }
+        public List<int> CategoryIds { get; set; }
     }
 
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandRequest, int>

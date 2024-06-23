@@ -1,10 +1,11 @@
 ﻿using HepsiAPI.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace HepsiAPI.Persistence.Context
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         public AppDbContext()
         {

@@ -24,5 +24,15 @@ namespace HepsiAPI.Application.Features.ProductFeatures.Rules
             }
         }
 
+        public async Task ProductExistsAsync(int id)
+        {
+            var productExists = await _productReadRepository.ExistsAsync(p => p.Id == id);
+
+            if (productExists)
+            {
+                throw new BusinessException($"Product {id} does not exist");
+            }
+        }
+
     }
 }

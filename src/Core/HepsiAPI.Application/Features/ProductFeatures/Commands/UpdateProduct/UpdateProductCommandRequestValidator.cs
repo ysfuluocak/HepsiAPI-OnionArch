@@ -1,9 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HepsiAPI.Application.Features.ProductFeatures.Commands.UpdateProduct
 {
@@ -11,6 +6,10 @@ namespace HepsiAPI.Application.Features.ProductFeatures.Commands.UpdateProduct
     {
         public UpdateProductCommandRequestValidator()
         {
+            RuleFor(p => p.Id).NotEmpty();
+
+            RuleFor(p => p.Id).GreaterThan(0);
+
             RuleFor(p => p.Title).NotEmpty();
 
             RuleFor(p => p.Description).NotEmpty();
