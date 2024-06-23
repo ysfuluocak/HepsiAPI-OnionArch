@@ -18,27 +18,52 @@ namespace HepsiAPI.Persistence.Repositories.EfCoreRepositories
             _dbSet = _dbContext.Set<TEntity>();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, params Expression<Func<TEntity, object>>[] includes)
+
+
+        public IQueryable<TEntity> AsQueryable() => _dbSet.AsQueryable();
+
+        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = _dbSet.AsNoTracking();
             if (predicate is not null) query = query.Where(predicate);
-            return await query.IncludeMultiple(includes).ToListAsync();
+            if (orderBy is not null) query = orderBy(query);
+            var entities = await query.IncludeMultiple(includes).ToListAsync();
+            return entities;
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(int pageNumber = 1, int pageSize = 10, Expression<Func<TEntity, bool>>? predicate = null, params Expression<Func<TEntity, object>>[] includes)
+        public async Task<List<TEntity>> GetPaginatedListAsync(int pageIndex, int pageSize, Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = _dbSet.AsNoTracking();
             if (predicate is not null) query = query.Where(predicate);
-            return await query.IncludeMultiple(includes).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            if (orderBy is not null) query = orderBy(query);
+            var entities = await query.IncludeMultiple(includes).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return entities;
         }
 
-        public async Task<TEntity> GetAsync(bool enableTracking, Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+        public async Task<TEntity?> GetSingleEntityAsync(Expression<Func<TEntity, bool>> predicate, bool noTracking = true, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = _dbSet;
-            query = enableTracking ? query : query.AsNoTracking();
-            return await query.IncludeMultiple(includes).SingleOrDefaultAsync(predicate);
-            //return await query.IncludeMultiple(includes).FirstOrDefaultAsync(predicate);
+            query = noTracking ? query.AsNoTracking() : query;
+            var entity = await query.IncludeMultiple(includes).FirstOrDefaultAsync(predicate);
+            //return await query.IncludeMultiple(includes).SingleOrDefaultAsync(predicate);
+            return entity;
         }
+
+
+        public IQueryable<TEntity?> Get(Expression<Func<TEntity, bool>> predicate, bool noTracking = true, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            query = noTracking ? query.AsNoTracking() : query;
+
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            query = query.IncludeMultiple(includes);
+
+            return query;
+        }
+
 
         public async Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null)
         {
@@ -49,7 +74,6 @@ namespace HepsiAPI.Persistence.Repositories.EfCoreRepositories
         {
             return await _dbSet.AnyAsync(predicate);
         }
-
 
     }
 }

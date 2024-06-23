@@ -1,8 +1,8 @@
-﻿using Azure.Core;
-using HepsiAPI.Application.Features.ProductFeatures.Commands.CreateProduct;
+﻿using HepsiAPI.Application.Features.ProductFeatures.Commands.CreateProduct;
 using HepsiAPI.Application.Features.ProductFeatures.Commands.DeleteProduct;
 using HepsiAPI.Application.Features.ProductFeatures.Commands.UpdateProduct;
 using HepsiAPI.Application.Features.ProductFeatures.Queries.GetAllProducts;
+using HepsiAPI.Application.Features.ProductFeatures.Queries.GetPage;
 using HepsiAPI.Application.Features.ProductFeatures.Queries.GetProduct;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +24,13 @@ namespace HepsiAPI.WebAPI.Controllers
         public async Task<IActionResult> GetAllProduct()
         {
             var result = await _mediator.Send(new GetAllProductsQueryRequest());
+            return Ok(result);
+        }
+
+        [HttpGet("{index}&{size}")]
+        public async Task<IActionResult> GetAllProductPage(int index, int size)
+        {
+            var result = await _mediator.Send(new GetPageQueryRequest() { PageIndex = index, PageSize = size });
             return Ok(result);
         }
 
@@ -52,6 +59,7 @@ namespace HepsiAPI.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
+
             await _mediator.Send(new DeleteProductCommandRequest() { Id = id });
             return NoContent();
         }

@@ -1,31 +1,38 @@
-﻿using HepsiAPI.Application.Interfaces.UnitOfWorks;
+﻿using HepsiAPI.Application.Interfaces.Repositories.ProductRepositories;
 using MediatR;
 
 namespace HepsiAPI.Application.Features.ProductFeatures.Commands.DeleteProduct
 {
-    public class DeleteProductCommandRequest : IRequest
+    public class DeleteProductCommandRequest : IRequest<Unit>
     {
         public int Id { get; set; }
     }
 
-    public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandRequest>
+    public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandRequest, Unit>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public DeleteProductCommandHandler(IUnitOfWork unitOfWork)
+        private readonly IProductWriteRepository _productWriteRepository;
+        private readonly IProductReadRepository _productReadRepository;
+        public DeleteProductCommandHandler(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository)
         {
-            _unitOfWork = unitOfWork;
+            _productWriteRepository = productWriteRepository;
+            _productReadRepository = productReadRepository;
         }
 
-        public async Task Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
         {
-            var deletedProduct = await _unitOfWork.GetProductReadRepository.GetAsync(false, p => p.Id == request.Id);
+            var deletedProduct = await _productReadRepository.GetSingleEntityAsync(p => p.Id == request.Id);
+
+            if (deletedProduct is null)
+            {
+                throw new Exception("YOK");
+            }
 
             deletedProduct.IsDeleted = true;
 
-            await _unitOfWork.GetProductWriteRepository.UpdateAsync(deletedProduct);
+            await _productWriteRepository.UpdateAsync(deletedProduct);
 
-            await _unitOfWork.SaveAsync();
+
+            return Unit.Value;
         }
     }
 }

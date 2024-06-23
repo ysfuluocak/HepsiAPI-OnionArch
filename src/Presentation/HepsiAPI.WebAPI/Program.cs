@@ -1,5 +1,6 @@
 using HepsiAPI.Persistence;
 using HepsiAPI.Application;
+using HepsiAPI.WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.UseCustomExceptionMiddleware();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

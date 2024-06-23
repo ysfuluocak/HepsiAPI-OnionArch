@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using HepsiAPI.Application.Dtos;
-using HepsiAPI.Application.Interfaces.UnitOfWorks;
+using HepsiAPI.Application.Interfaces.Repositories.ProductRepositories;
 using MediatR;
 
 namespace HepsiAPI.Application.Features.ProductFeatures.Queries.GetProduct
@@ -12,18 +12,18 @@ namespace HepsiAPI.Application.Features.ProductFeatures.Queries.GetProduct
 
     public class GetProductQueryHandler : IRequestHandler<GetProductQueryRequest, GetProductQueryResponse>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IProductReadRepository _productReadRepository;
         private readonly IMapper _mapper;
 
-        public GetProductQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public GetProductQueryHandler(IProductReadRepository productReadRepository, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _productReadRepository = productReadRepository;
             _mapper = mapper;
         }
 
         public async Task<GetProductQueryResponse> Handle(GetProductQueryRequest request, CancellationToken cancellationToken)
         {
-            var product = await _unitOfWork.GetProductReadRepository.GetProductByIdWithDetail(request.Id);
+            var product = await _productReadRepository.GetProductByIdWithDetail(request.Id);
 
             var response = _mapper.Map<GetProductQueryResponse>(product);
 

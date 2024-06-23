@@ -52,5 +52,10 @@ namespace HepsiAPI.Persistence.Repositories.EfCoreRepositories
 
             await Task.Run(() => _dbSet.RemoveRange(entities));
         }
+
+        public async Task<int> CommitAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
     }
 }
