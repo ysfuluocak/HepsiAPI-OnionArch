@@ -2,49 +2,44 @@
 using HepsiAPI.Application.Features.ProductFeatures.Commands.DeleteProduct;
 using HepsiAPI.Application.Features.ProductFeatures.Commands.UpdateProduct;
 using HepsiAPI.Application.Features.ProductFeatures.Queries.GetAllProducts;
-using HepsiAPI.Application.Features.ProductFeatures.Queries.GetPage;
+using HepsiAPI.Application.Features.ProductFeatures.Queries.GetPaginationProducts;
 using HepsiAPI.Application.Features.ProductFeatures.Queries.GetProduct;
-using MediatR;
+using HepsiAPI.Application.Parameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HepsiAPI.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseController
     {
-        private readonly IMediator _mediator;
-
-        public ProductsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
 
         [HttpGet]
         public async Task<IActionResult> GetAllProduct()
         {
-            var result = await _mediator.Send(new GetAllProductsQueryRequest());
+            var result = await Mediator.Send(new GetAllProductsQueryRequest());
             return Ok(result);
         }
 
-        [HttpGet("{index}&{size}")]
-        public async Task<IActionResult> GetAllProductPage(int index, int size)
+        [HttpGet("paginated")]
+        public async Task<IActionResult> GetPaginationProducts([FromQuery] RequestParameters request)
         {
-            var result = await _mediator.Send(new GetPageQueryRequest() { PageIndex = index, PageSize = size });
+            var result = await Mediator.Send(new GetPaginatedProductsQueryRequest() { RequestParameters = request });
             return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAllProduct(int id)
         {
-            var result = await _mediator.Send(new GetProductQueryRequest() { Id = id });
+            var result = await Mediator.Send(new GetProductQueryRequest() { Id = id });
             return Ok(result);
+
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateProduct(CreateProductCommandRequest request)
         {
-            var result = await _mediator.Send(request);
+            var result = await Mediator.Send(request);
             return Ok(result);
         }
 
@@ -52,7 +47,7 @@ namespace HepsiAPI.WebAPI.Controllers
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductCommandRequest request)
         {
             request.Id = id;
-            var result = await _mediator.Send(request);
+            var result = await Mediator.Send(request);
             return Ok(result);
         }
 
@@ -60,7 +55,7 @@ namespace HepsiAPI.WebAPI.Controllers
         public async Task<IActionResult> DeleteProduct(int id)
         {
 
-            await _mediator.Send(new DeleteProductCommandRequest() { Id = id });
+            await Mediator.Send(new DeleteProductCommandRequest() { Id = id });
             return NoContent();
         }
     }

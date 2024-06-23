@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HepsiAPI.Application.Features.ProductFeatures.Queries.GetProduct;
+using HepsiAPI.Application.Features.ProductFeatures.Rules;
 using HepsiAPI.Application.Interfaces.Repositories.CategoryProductRepositories;
 using HepsiAPI.Application.Interfaces.Repositories.ProductRepositories;
 using MediatR;
@@ -25,19 +26,27 @@ namespace HepsiAPI.Application.Features.ProductFeatures.Commands.UpdateProduct
         private readonly IProductWriteRepository _productWriteRepository;
         private readonly IProductReadRepository _productReadRepository;
         private readonly IMapper _mapper;
+        private readonly ProductBusinessRules _productBusinessRules;
 
 
-        public UpdateProductCommandHandler(ICategoryProductReadRepository categoryProductReadRepository, ICategoryProductWriteRepository categoryProductWriteRepository, IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IMapper mapper)
+        public UpdateProductCommandHandler(ICategoryProductReadRepository categoryProductReadRepository, ICategoryProductWriteRepository categoryProductWriteRepository, IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IMapper mapper, ProductBusinessRules productBusinessRules)
         {
             _categoryProductReadRepository = categoryProductReadRepository;
             _categoryProductWriteRepository = categoryProductWriteRepository;
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
+            _productBusinessRules = productBusinessRules;
             _mapper = mapper;
         }
 
         public async Task<GetProductQueryResponse> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
         {
+
+            //Rules
+            await _productBusinessRules.ProductExistsAsync(request.Id);
+
+
+
             var existingProduct = await _productReadRepository.GetSingleEntityAsync(p => p.Id == request.Id, true, p => p.CategoryProducts);
 
             await _categoryProductWriteRepository.DeleteRangeAsync(existingProduct.CategoryProducts);
