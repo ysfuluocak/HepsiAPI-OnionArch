@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HepsiAPI.Application.Services.Tokens
+namespace HepsiAPI.Application.Services.TokenHelper
 {
     public class AccessToken
     {

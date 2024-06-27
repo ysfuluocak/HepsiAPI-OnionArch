@@ -21,6 +21,7 @@ builder.Configuration.SetBasePath(env.ContentRootPath)
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSwaggerGen(opt =>
 {

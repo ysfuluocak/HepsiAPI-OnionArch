@@ -19,4 +19,8 @@
     <ProjectReference Include="..\HepsiAPI.Domain\HepsiAPI.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Auths\Queries\" />
+  </ItemGroup>
+
 </Project>
