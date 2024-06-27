@@ -5,6 +5,7 @@ using HepsiAPI.Application.Features.ProductFeatures.Queries.GetAllProducts;
 using HepsiAPI.Application.Features.ProductFeatures.Queries.GetPaginationProducts;
 using HepsiAPI.Application.Features.ProductFeatures.Queries.GetProduct;
 using HepsiAPI.Application.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HepsiAPI.WebAPI.Controllers
@@ -14,6 +15,8 @@ namespace HepsiAPI.WebAPI.Controllers
     public class ProductsController : BaseController
     {
 
+        [Authorize(Roles = "user")]
+
         [HttpGet]
         public async Task<IActionResult> GetAllProduct()
         {
@@ -21,6 +24,7 @@ namespace HepsiAPI.WebAPI.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles ="admin")]
         [HttpGet("paginated")]
         public async Task<IActionResult> GetPaginationProducts([FromQuery] RequestParameters request)
         {

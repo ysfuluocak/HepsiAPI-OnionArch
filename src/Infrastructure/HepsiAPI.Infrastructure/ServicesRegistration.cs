@@ -1,4 +1,4 @@
-﻿using HepsiAPI.Application.Services.Tokens;
+﻿using HepsiAPI.Application.Services.TokenHelper;
 using HepsiAPI.Infrastructure.Tokens.Encryption;
 using HepsiAPI.Infrastructure.Tokens.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,7 +17,7 @@ namespace HepsiAPI.Infrastructure
 
             services.Configure<TokenOptions>(configuration.GetSection("TokenOptions"));
 
-            services.AddScoped<ITokenService, JwtManager>();
+            services.AddScoped<ITokenHelper, JwtHelper>();
 
             TokenOptions? tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
